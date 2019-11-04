@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import classes from './App.module.css';
-import Person from './Person/Person';
+
+import Persons from '../components/Persons/Persons';
 
 class App extends Component {
-  state = {
-    persons: [
-      { id: 'asfa1', name: 'Max', age: 28 },
-      { id: 'vasdf1', name: 'Manu', age: 29 },
-      { id: 'asdf11', name: 'Stephanie', age: 26 }
-    ],
-    otherState: 'some other value',
-    showPersons: false
+  constructor(){
+    super();
+      this.state = {
+        persons: [
+          { id: 'asfa1', name: 'Max', age: 28 },
+          { id: 'vasdf1', name: 'Manu', age: 29 },
+          { id: 'asdf11', name: 'Stephanie', age: 26 }
+        ],
+        otherState: 'some other value',
+        showPersons: false
+    }  
   }
 
-  nameChangedHandler = ( event, id ) => {
+  nameChangedHandler = ( value, personId ) => {
+    //console.log(value, personId);
     const personIndex = this.state.persons.findIndex( p => {
-      return p.id === id;
+      return p.id === personId
     } );
 
     const person = {
@@ -24,7 +29,7 @@ class App extends Component {
 
     // const person = Object.assign({}, this.state.persons[personIndex]);
 
-    person.name = event.target.value;
+    person.name = value;
 
     const persons = [...this.state.persons];
     persons[personIndex] = person;
@@ -32,8 +37,13 @@ class App extends Component {
     this.setState( { persons: persons } );
   }
 
-  deletePersonHandler = ( personIndex ) => {
-    // const persons = this.state.persons.slice();
+  deletePersonHandler = ( personId ) => {
+    //const persons = this.state.persons.slice();
+    const personIndex = this.state.persons.findIndex(
+      (person)=>person.id === personId
+    );
+    /* console.log(personIndex); */
+
     const persons = [...this.state.persons];
     persons.splice( personIndex, 1 );
     this.setState( { persons: persons } );
@@ -49,18 +59,11 @@ class App extends Component {
     let btnClass = '';
 
     if ( this.state.showPersons ) {
-      persons = (
-        <div>
-          {this.state.persons.map( ( person, index ) => {
-            return <Person
-              click={() => this.deletePersonHandler( index )}
-              name={person.name}
-              age={person.age}
-              key={person.id}
-              changed={( event ) => this.nameChangedHandler( event, person.id )} />
-          } )}
-        </div>
-      );
+      persons = <Persons 
+        persons={this.state.persons}
+        deleteHandler={this.deletePersonHandler}
+        changedHandler={this.nameChangedHandler}
+      />
 
       btnClass = classes.Red;
     }
