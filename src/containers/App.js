@@ -2,19 +2,22 @@ import React, { Component } from 'react';
 import classes from './App.module.css';
 
 import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
-  constructor(){
-    super();
-      this.state = {
-        persons: [
-          { id: 'asfa1', name: 'Max', age: 28 },
-          { id: 'vasdf1', name: 'Manu', age: 29 },
-          { id: 'asdf11', name: 'Stephanie', age: 26 }
-        ],
-        otherState: 'some other value',
-        showPersons: false
-    }  
+  constructor(props){
+    super(props);    
+
+    this.state = {
+      appName: props.name,
+      persons: [
+        { id: 'asfa1', name: 'Max', age: 28 },
+        { id: 'vasdf1', name: 'Manu', age: 29 },
+        { id: 'asdf11', name: 'Stephanie', age: 26 }
+      ],
+      otherState: 'some other value',
+      showPersons: false
+  }  
   }
 
   nameChangedHandler = ( value, personId ) => {
@@ -78,11 +81,12 @@ class App extends Component {
 
     return (
         <div className={classes.App}>
-          <h1>Hi, I'm a React App</h1>
-          <p className={assignedClasses.join( ' ' )}>This is really working!</p>
-          <button
-            className={btnClass}
-            onClick={this.togglePersonsHandler}>Toggle Persons</button>
+          <Cockpit
+            paragraphClassName={assignedClasses.join( ' ' )}
+            buttonClassName={btnClass}
+            click={this.togglePersonsHandler}
+            appName={this.state.appName}
+          />
           {persons}
         </div>
     );
