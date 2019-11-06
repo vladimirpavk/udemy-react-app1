@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classes from './App.module.css';
 
+import AuthContext from '../context/auth-context';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 
@@ -16,8 +17,15 @@ class App extends Component {
         { id: 'asdf11', name: 'Stephanie', age: 26 }
       ],
       otherState: 'some other value',
-      showPersons: false
-  }  
+      showPersons: false,
+      isAuth: false
+    };
+  }
+
+  loginHandler = ()=>{
+    this.setState({
+      isAuth: true
+    });
   }
 
   nameChangedHandler = ( value, personId ) => {
@@ -81,6 +89,12 @@ class App extends Component {
 
     return (
         <div className={classes.App}>
+        <AuthContext.Provider value={
+          {
+            isAuthenticated: false,
+            login: this.loginHandler
+          }          
+        }>
           <Cockpit
             paragraphClassName={assignedClasses.join( ' ' )}
             buttonClassName={btnClass}
@@ -88,6 +102,7 @@ class App extends Component {
             appName={this.state.appName}
           />
           {persons}
+        </AuthContext.Provider>          
         </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
