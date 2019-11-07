@@ -6,6 +6,9 @@ import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
+
+  static authContext = AuthContext;
+
   constructor(props){
     super(props);    
 
@@ -23,8 +26,11 @@ class App extends Component {
   }
 
   loginHandler = ()=>{
-    this.setState({
-      isAuth: true
+    console.log('Login handler...');
+    this.setState((prevState)=>{
+      return {
+        isAuth: !prevState.isAuth
+      }      
     });
   }
 
@@ -89,20 +95,20 @@ class App extends Component {
 
     return (
         <div className={classes.App}>
-        <AuthContext.Provider value={
-          {
-            isAuthenticated: false,
-            login: this.loginHandler
-          }          
-        }>
-          <Cockpit
-            paragraphClassName={assignedClasses.join( ' ' )}
-            buttonClassName={btnClass}
-            click={this.togglePersonsHandler}
-            appName={this.state.appName}
-          />
-          {persons}
-        </AuthContext.Provider>          
+          <AuthContext.Provider value={
+            {
+              isAuthenticated: this.state.isAuth,
+              login: this.loginHandler
+            }          
+          }>
+            <Cockpit
+              paragraphClassName={assignedClasses.join( ' ' )}
+              buttonClassName={btnClass}
+              click={this.togglePersonsHandler}
+              appName={this.state.appName}
+            />
+            {persons}
+          </AuthContext.Provider>          
         </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));

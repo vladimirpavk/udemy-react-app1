@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import AuthContext from '../../../context/auth-context';
 
@@ -6,6 +6,7 @@ import classes from './Person.module.css';
 
 const Person = ( props ) => {
     let inputButtonRef = useRef(null);
+    const authContext = useContext(AuthContext);
 
     useEffect(
         ()=>{
@@ -15,23 +16,20 @@ const Person = ( props ) => {
     );
 
     return (
-        <AuthContext.Cosumer>
+        <div className={classes.Person}>
             {
-                (context)=>{
-                    <div className={classes.Person}>
-                        <p onClick={props.click}>I'm {props.person.name} and I am {props.person.age} years old!</p>
-                        <p>{props.children}</p>
-                        <input
-                            ref={inputButtonRef}
-                            type="text"
-                            onChange={(event)=>props.changed(event.target.value, props.person.id)}
-                            value={props.person.name}                
-                        />
-                    </div>
-                }
-            }
-        </AuthContext.Cosumer>        
-    )
+                authContext.isAuthenticated ? <p>User is logged in...</p> : <p>User is not logged in...</p>
+            }          
+            <p onClick={props.click}>I'm {props.person.name} and I am {props.person.age} years old!</p>
+            <p>{props.children}</p>
+            <input
+                ref={inputButtonRef}
+                type="text"
+                onChange={(event)=>props.changed(event.target.value, props.person.id)}
+                value={props.person.name}                
+            />
+        </div>    
+    );
 };
 
 Person.propTypes = {

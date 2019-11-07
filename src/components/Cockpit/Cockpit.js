@@ -1,17 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
+import AuthContext from '../../context/auth-context';
 
 const Cockpit = (props)=>{
+    const authContext = useContext(AuthContext);
+
     return (
         <div>
             <h1>{props.appName}</h1>
             <p className={props.paragraphClassName}>This is really working!</p>
             <button
                 className={props.buttonClassName}
-                onClick={props.click}>Toggle Persons</button>
-             <button
-                className={props.buttonClassName}>
-                Log in</button>
+                onClick={props.click}>Toggle Persons</button>                            
+            <button className={props.buttonClassName} onClick={authContext.login}>{authContext.isAuthenticated ? 'Logout' : 'Login'}</button>                                                
         </div>
     );
 }
